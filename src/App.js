@@ -1,6 +1,8 @@
 import './App.css';
 import HomePage from "./pages/homepage/homepage.component.jsx"
 import {Routes,Route} from 'react-router-dom'
+import Shop from "./pages/shop/shop.component.jsx"
+import Header from './components/header/header.component';
 
 const Hatspage =props => {
   console.log(props);
@@ -61,20 +63,21 @@ function App() {
 
   return (
 
+    <>
     
-    <Routes>
-     
-        <Route path="/" element={<HomePage/>} />
-        <Route path="shop/hats" element={<Hatspage />} />
-        <Route path="shop/jackets" element={<Jacketspage />} />
-        <Route path="shop/sneakers" element={<Sneakerspage />} />
-        <Route path="shop/womens" element={<Womenspage />} />
-        <Route path="shop/mens" element={<Menspage />} />
-        <Route path="*" element={<div style={myInlineStyle}>404 Page not found😶</div>}/>
-  
-       
-      
+    <Header /><Routes>
+
+      <Route path="/" element={<HomePage />} />
+      <Route path="/shop" element={<Shop />} />
+      <Route path="shop/hats" element={<Hatspage />} />
+      <Route path="shop/jackets" element={<Jacketspage />} />
+      <Route path="shop/sneakers" element={<Sneakerspage />} />
+      <Route path="shop/womens" element={<Womenspage />} />
+      <Route path="shop/mens" element={<Menspage />} />
+      <Route path="*" element={<div style={myInlineStyle}>404 Page not found😶</div>} />
+
     </Routes>
+    </>
     
   );
 }
