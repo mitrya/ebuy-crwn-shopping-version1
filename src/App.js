@@ -3,6 +3,18 @@ import HomePage from "./pages/homepage/homepage.component.jsx"
 import {Routes,Route} from 'react-router-dom'
 import Shop from "./pages/shop/shop.component.jsx"
 import Header from './components/header/header.component';
+import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
+import { Component } from 'react/cjs/react.production.min';
+import { auth } from './firebase/firebase.utils';
+
+const myInlineStyle={
+  color:'black',
+  fontSize:'40px',
+  fontFamily:'Ariel',
+  position:'absolute',
+  top:'50%',
+  left:'40%'
+}
 
 const Hatspage =props => {
   console.log(props);
@@ -50,22 +62,51 @@ const Menspage =props => {
 }
 
 
-function App() {
+class App extends Component {
  
-  let myInlineStyle={
-    color:'black',
-    fontSize:'40px',
-    fontFamily:'Ariel',
-    position:'absolute',
-    top:'50%',
-    left:'40%'
- }
+  constructor()
+  {
+    super();
+    this.state = {
+      currentUser:null
+    };
+  }
 
+
+  unsubscribeFromAuth = null;
+
+  componentDidMount(){
+
+    this.unsubscribeFromAuth=auth.onAuthStateChanged( 
+      
+      (user) =>
+      { 
+        this.setState( {currentUser:user} );
+        console.log(user);
+      }
+      
+    );
+
+  }
+
+  componentWillUnmount()
+  {
+    this.unsubscribeFromAuth();
+  }
+
+
+
+
+
+ render ()
+ {
   return (
 
     <>
     
-    <Header /><Routes>
+    <Header currentUser={this.state.currentUser}/>
+    
+    <Routes>
 
       <Route path="/" element={<HomePage />} />
       <Route path="/shop" element={<Shop />} />
@@ -74,12 +115,15 @@ function App() {
       <Route path="shop/sneakers" element={<Sneakerspage />} />
       <Route path="shop/womens" element={<Womenspage />} />
       <Route path="shop/mens" element={<Menspage />} />
+      <Route path="signIn" element={<SignInAndSignUpPage/>} />
       <Route path="*" element={<div style={myInlineStyle}>404 Page not found😶</div>} />
 
     </Routes>
     </>
     
   );
+ }
+  
 }
 
 export default App;

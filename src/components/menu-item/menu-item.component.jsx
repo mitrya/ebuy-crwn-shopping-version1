@@ -9,7 +9,7 @@ const MenuItem = (props) => {
     let navigate = useNavigate();
     
     function handleClick() {
-        console.log(props.linkUrl);
+        // console.log(props.linkUrl);
         navigate("/"+props.linkUrl)
     }
 
