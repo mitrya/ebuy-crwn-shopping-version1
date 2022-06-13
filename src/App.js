@@ -5,7 +5,7 @@ import Shop from "./pages/shop/shop.component.jsx"
 import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 import { Component } from 'react/cjs/react.production.min';
-import { auth } from './firebase/firebase.utils';
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 
 const myInlineStyle={
   color:'black',
@@ -79,12 +79,28 @@ class App extends Component {
 
     this.unsubscribeFromAuth=auth.onAuthStateChanged( 
       
-      (user) =>
-      { 
-        this.setState( {currentUser:user} );
-        console.log(user);
+      async user => {
+        if(user)
+        {
+          console.log(user);
+          const userRef = createUserProfileDocument(user);
+          (await userRef).onSnapshot(snapShot=>{
+            this.setState( {
+              currentUser:{
+                id:snapShot.id,
+                ...snapShot.data()
+              }
+            
+            });  
+          })
+        }
+        else
+        {
+          this.setState({currentUser:user});
+        }
+        
       }
-      
+
     );
 
   }

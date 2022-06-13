@@ -8,7 +8,7 @@ const CollectionPreview = ({title,items}) =>
            
             <h1 className="title">
              {title}
-            </h1>
+            </h1> 
 
             <div className="preview">
                 {
