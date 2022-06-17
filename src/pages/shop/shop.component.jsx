@@ -21,7 +21,7 @@ class Shop extends Component
             {
                 
                 collections.map(  ({id,...otherCollectionProps}) => (
-                    <CollectionPreview id={id} {...otherCollectionProps}/>
+                    <CollectionPreview key={id} id={id} {...otherCollectionProps}/>
                 ) )
                 
             }   
