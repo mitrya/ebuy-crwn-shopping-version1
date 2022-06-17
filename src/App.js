@@ -1,6 +1,6 @@
 import './App.css';
 import HomePage from "./pages/homepage/homepage.component.jsx"
-import {Routes,Route} from 'react-router-dom'
+import {Routes,Route,Navigate} from 'react-router-dom'
 import Shop from "./pages/shop/shop.component.jsx"
 import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
@@ -127,7 +127,7 @@ class App extends Component {
       <Route path="shop/sneakers" element={<Sneakerspage />} />
       <Route path="shop/womens" element={<Womenspage />} />
       <Route path="shop/mens" element={<Menspage />} />
-      <Route path="signIn" element={<SignInAndSignUpPage/>} />
+      <Route path="signIn" element={(this.props.currentUser ? (<Navigate replace to="/" />) : <SignInAndSignUpPage/>)} />
       <Route path="*" element={<div style={myInlineStyle}>404 Page not found😶</div>} />
 
     </Routes>
@@ -137,8 +137,11 @@ class App extends Component {
  }
   
 }
+const mapStateToProps = ({user}) => ({
+  currentUser : user.currentUser
+})
 
 const mapDispatchToProps = dispatch => ({
   setCurrentUser: user =>  dispatch(setCurrentUser(user))
 })
-export default connect(null,mapDispatchToProps)(App);
+export default connect(mapStateToProps,mapDispatchToProps)(App);
