@@ -127,6 +127,7 @@ class App extends Component {
       <Route path="shop/sneakers" element={<Sneakerspage />} />
       <Route path="shop/womens" element={<Womenspage />} />
       <Route path="shop/mens" element={<Menspage />} />
+      {/* <Route path="signIn" element={<SignInAndSignUpPage/>} /> */}
       <Route path="signIn" element={(this.props.currentUser ? (<Navigate replace to="/" />) : <SignInAndSignUpPage/>)} />
       <Route path="*" element={<div style={myInlineStyle}>404 Page not found😶</div>} />
 
