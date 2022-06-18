@@ -1,13 +1,20 @@
+import { Component } from 'react/cjs/react.production.min';
 import './App.css';
-import HomePage from "./pages/homepage/homepage.component.jsx"
 import {Routes,Route,Navigate} from 'react-router-dom'
+
+import HomePage from "./pages/homepage/homepage.component.jsx"
 import Shop from "./pages/shop/shop.component.jsx"
 import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
-import { Component } from 'react/cjs/react.production.min';
+import CheckoutPage from './pages/checkout/checkout.component';
+
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+
 import { connect } from 'react-redux';
 import { setCurrentUser } from './redux/user/user.action';
+import { selectCurrentUser } from './redux/user/user.selector';
+import {createStructuredSelector} from 'reselect';
+
 const myInlineStyle={
   color:'black',
   fontSize:'40px',
@@ -122,6 +129,7 @@ class App extends Component {
 
       <Route path="/" element={<HomePage />} />
       <Route path="/shop" element={<Shop />} />
+      <Route path='/checkout' element={<CheckoutPage/>} />
       <Route path="shop/hats" element={<Hatspage />} />
       <Route path="shop/jackets" element={<Jacketspage />} />
       <Route path="shop/sneakers" element={<Sneakerspage />} />
@@ -138,8 +146,8 @@ class App extends Component {
  }
   
 }
-const mapStateToProps = ({user}) => ({
-  currentUser : user.currentUser
+const mapStateToProps = createStructuredSelector({
+  currentUser : selectCurrentUser
 })
 
 const mapDispatchToProps = dispatch => ({
