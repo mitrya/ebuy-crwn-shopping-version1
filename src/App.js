@@ -75,7 +75,6 @@ class App extends Component {
           }
           
           settingUser().then(() => rehydrateCart(cartItemsCopy));
-          console.log(cartItemsCopy)
         }
         
       }
