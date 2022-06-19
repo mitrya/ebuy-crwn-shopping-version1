@@ -14,6 +14,9 @@ import { connect } from 'react-redux';
 import { setCurrentUser } from './redux/user/user.action';
 import { selectCurrentUser } from './redux/user/user.selector';
 import {createStructuredSelector} from 'reselect';
+import { selectCartItems } from './redux/cart/cart.selectors';
+import { rehydrateCart } from './redux/cart/cart.action';
+import CollectionPage from './components/collection/collection.component';
 
 const myInlineStyle={
   color:'black',
@@ -22,51 +25,6 @@ const myInlineStyle={
   position:'absolute',
   top:'50%',
   left:'40%'
-}
-
-const Hatspage =props => {
-  console.log(props);
-  return ( 
-    <div>
-      Hatspage
-    </div>
-  );
-}
-
-const Jacketspage =props => {
-  console.log(props);
-  return (
-    <div>
-      Jacketspage
-    </div>
-  );
-}
-
-const Sneakerspage =props => {
-  console.log(props);
-  return (
-    <div>
-      Sneakerspage
-    </div>
-  );
-}
-
-const Womenspage =props => {
-  console.log(props);
-  return (
-    <div>
-      Womenspage
-    </div>
-  );
-}
-
-const Menspage =props => {
-  console.log(props);
-  return (
-    <div>
-      Menspage
-    </div>
-  );
 }
 
 
@@ -79,27 +37,45 @@ class App extends Component {
 
     console.log("hello")
     const {setCurrentUser} = this.props;
+    const {rehydrateCart} = this.props;
+    const {cartItems} = this.props;
+    var cartItemsCopy=cartItems;
+
     this.unsubscribeFromAuth=auth.onAuthStateChanged( 
       
       async user => {
         if(user)
         {
           console.log(user);
+          console.log(cartItems)
           const userRef = createUserProfileDocument(user);
           (await userRef).onSnapshot(snapShot=>{
            
-            setCurrentUser( {
-              currentUser:{
-                id:snapShot.id,
-                ...snapShot.data()
-              }
-            
-            });  
+            const settingUser=async() =>
+            {
+              await setCurrentUser( {
+                currentUser:{
+                  id:snapShot.id,
+                  ...snapShot.data()
+                }
+              });  
+  
+            }
+            settingUser().then(() => rehydrateCart(cartItemsCopy));
+
+
           })
+
         }
         else
         {
-          setCurrentUser({currentUser:user});
+          const settingUser = async () => 
+          {
+            await setCurrentUser({currentUser:user});
+          }
+          
+          settingUser().then(cartItemsCopy => rehydrateCart(cartItemsCopy));
+          console.log(cartItemsCopy)
         }
         
       }
@@ -129,13 +105,9 @@ class App extends Component {
 
       <Route path="/" element={<HomePage />} />
       <Route path="/shop" element={<Shop />} />
+      <Route path="/shop/:collection" element={<CollectionPage />} />
       <Route path='/checkout' element={<CheckoutPage/>} />
-      <Route path="shop/hats" element={<Hatspage />} />
-      <Route path="shop/jackets" element={<Jacketspage />} />
-      <Route path="shop/sneakers" element={<Sneakerspage />} />
-      <Route path="shop/womens" element={<Womenspage />} />
-      <Route path="shop/mens" element={<Menspage />} />
-      {/* <Route path="signIn" element={<SignInAndSignUpPage/>} /> */}
+         
       <Route path="signIn" element={(this.props.currentUser ? (<Navigate replace to="/" />) : <SignInAndSignUpPage/>)} />
       <Route path="*" element={<div style={myInlineStyle}>404 Page not found😶</div>} />
 
@@ -147,10 +119,14 @@ class App extends Component {
   
 }
 const mapStateToProps = createStructuredSelector({
-  currentUser : selectCurrentUser
+  currentUser : selectCurrentUser,
+  cartItems: selectCartItems
+
 })
 
 const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user =>  dispatch(setCurrentUser(user))
+  setCurrentUser: user =>  dispatch(setCurrentUser(user)),
+  rehydrateCart: cartItems =>  dispatch(rehydrateCart(cartItems))
+
 })
 export default connect(mapStateToProps,mapDispatchToProps)(App);

@@ -18,3 +18,8 @@ export const removeItem=(item)=>({
     type: CartActionTypes.REMOVE_ITEM,
     payload:item
 }) 
+
+export const rehydrateCart=(item)=>({
+    type: 'REHYDRATE_CART',
+    payload:item
+}) 

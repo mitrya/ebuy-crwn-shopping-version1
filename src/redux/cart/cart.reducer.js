@@ -1,6 +1,12 @@
 import { CartActionTypes } from "./cart.types";
 import { addItemsToCart } from "./cart.utils";
 import { removeItemFromCart } from "./cart.utils";
+
+// import {REHYDRATE} from 'redux-persist/constants'
+// import {REHYDRATE} from 'redux-persist/lib/constants'
+
+
+
 const INTITIAL_STATE = {
     hidden : true,
     cartItems:[]
@@ -26,10 +32,14 @@ const cartReducer = (state=INTITIAL_STATE,action) => {
             }
 
         case CartActionTypes.CLEAR_ITEM_FROM_CART:
-        return{
-            ...state,
-            cartItems: state.cartItems.filter(cartItem => cartItem.id!= action.payload.id)
-        }
+            return{
+                ...state,
+                cartItems: state.cartItems.filter(cartItem => cartItem.id!== action.payload.id)
+            }
+        case CartActionTypes.REHYDRATE_CART:
+                var incoming = action.payload;
+                if (incoming) return {...state, cartItems:incoming};
+                return state;
         default:
             return INTITIAL_STATE;
     }
