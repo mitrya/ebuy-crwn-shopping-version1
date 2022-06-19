@@ -34,8 +34,6 @@ class App extends Component {
   unsubscribeFromAuth = null;
 
   componentDidMount(){
-
-    console.log("hello")
     const {setCurrentUser} = this.props;
     const {rehydrateCart} = this.props;
     const {cartItems} = this.props;
@@ -46,8 +44,6 @@ class App extends Component {
       async user => {
         if(user)
         {
-          console.log(user);
-          console.log(cartItems)
           const userRef = createUserProfileDocument(user);
           (await userRef).onSnapshot(snapShot=>{
            
@@ -62,7 +58,6 @@ class App extends Component {
   
             }
             settingUser().then(() => rehydrateCart(cartItemsCopy));
-
 
           })
 
