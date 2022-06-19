@@ -74,7 +74,7 @@ class App extends Component {
             await setCurrentUser({currentUser:user});
           }
           
-          settingUser().then(cartItemsCopy => rehydrateCart(cartItemsCopy));
+          settingUser().then(() => rehydrateCart(cartItemsCopy));
           console.log(cartItemsCopy)
         }
         
